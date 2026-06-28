@@ -657,7 +657,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // ===== INICIALIZAÇÃO =====
     popularSelectParticipantes();
-    if (btnJogos) btnJogos.click();
+    if(btnRanking) btnRanking.click();
+   window.btnJogos)= btnJogos
     window.palpitesData = palpitesData;
     window.resultadosCache = resultadosCache;
     window.todosJogos = todosJogos;
