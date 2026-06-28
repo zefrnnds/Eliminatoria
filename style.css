@@ -1,0 +1,1263 @@
+:root {
+    --green-pitch: #1a6b3c;
+    --green-dark: #0d4a2a;
+    --gold-trophy: #ffd700;
+    --gold-dark: #b8860b;
+    --blue-sky: #1e90ff;
+    --blue-dark: #0a3d7c;
+    --red-passion: #dc143c;
+    --white: #ffffff;
+    --bg-stadium: #0a1628;
+    --bg-card: rgba(26, 107, 60, 0.15);
+    --radius: 16px;
+    --shadow-gold: 0 4px 20px rgba(255, 215, 0, 0.3);
+    --shadow-green: 0 4px 20px rgba(26, 107, 60, 0.3);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Segoe UI', 'Montserrat', Arial, sans-serif;
+    background: 
+        radial-gradient(ellipse at top, #1a6b3c 0%, transparent 50%),
+        radial-gradient(ellipse at bottom, #0a3d7c 0%, transparent 50%),
+        linear-gradient(180deg, #0a1628 0%, #1a3a5c 50%, #0a1628 100%);
+    background-attachment: fixed;
+    color: var(--white);
+    min-height: 100vh;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Efeito de "grama" no fundo */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        repeating-linear-gradient(90deg, transparent, transparent 50px, rgba(255,255,255,0.02) 50px, rgba(255,255,255,0.02) 51px);
+    pointer-events: none;
+    z-index: 0;
+}
+
+header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+}
+
+h1 {
+    font-size: 3.5rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, var(--gold-trophy) 0%, #fff5b8 50%, var(--gold-trophy) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    text-shadow: 0 0 30px rgba(255, 215, 0, 0.5);
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from { filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.5)); }
+    to { filter: drop-shadow(0 0 20px rgba(255, 215, 0, 0.8)); }
+}
+
+/* Botões estilo "placar de estádio" */
+.toggle-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 25px;
+}
+
+.btn {
+    background: linear-gradient(135deg, var(--green-pitch) 0%, var(--green-dark) 100%);
+    border: 3px solid var(--gold-trophy);
+    color: var(--white);
+    padding: 14px 30px;
+    border-radius: 50px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+    box-shadow: var(--shadow-green);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-gold);
+}
+
+.btn.active {
+    background: linear-gradient(135deg, var(--gold-trophy) 0%, var(--gold-dark) 100%);
+    color: #000;
+    border-color: var(--white);
+    box-shadow: 0 0 25px rgba(255, 215, 0, 0.6);
+}
+/* FASE ELIMINATÓRIA */
+.elim-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.elim-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 15px;
+}
+
+.elim-match {
+    background: rgba(18, 43, 92, 0.7);
+    border-radius: 12px;
+    padding: 15px 20px;
+    border: 2px solid rgba(255, 215, 0, 0.2);
+    transition: all 0.3s;
+    position: relative;
+    overflow: hidden;
+}
+
+.elim-match::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 4px;
+    height: 100%;
+    background: linear-gradient(180deg, #ffd700, #ffed4e);
+}
+
+.elim-match:hover {
+    transform: translateX(5px);
+    border-color: rgba(255, 215, 0, 0.6);
+    box-shadow: 0 5px 20px rgba(255, 215, 0, 0.3);
+}
+
+.elim-match.pending {
+    opacity: 0.8;
+    border-style: dashed;
+}
+
+/* PALPITES ELIMINATÓRIA */
+.eliminatoria-header {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.eliminatoria-header h2 {
+    margin: 0 0 15px 0;
+    font-size: 1.8rem;
+}
+
+.total-eliminatoria {
+    background: rgba(255, 215, 0, 0.2);
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.total-label {
+    font-size: 1rem;
+    margin-right: 10px;
+}
+
+.total-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffd700;
+}
+
+.eliminatoria-container {
+    overflow-x: auto;
+    background: #122b5c;
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.eliminatoria-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+.eliminatoria-table th,
+.eliminatoria-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.eliminatoria-table th {
+    background: rgba(0, 0, 0, 0.3);
+    color: #ffd700;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+
+.eliminatoria-table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.eliminatoria-table .data-hora {
+    font-size: 0.85rem;
+    white-space: nowrap;
+    color: #2ecc71;
+}
+
+.eliminatoria-table .jogo {
+    font-weight: 600;
+}
+
+.eliminatoria-table .palpite {
+    font-weight: 700;
+    color: #ffd700;
+}
+
+.eliminatoria-table .real {
+    color: #2ecc71;
+}
+
+.eliminatoria-table .pontos {
+    font-weight: bold;
+    text-align: center;
+}
+
+.eliminatoria-table .pontos.positivo {
+    color: #2ecc71;
+}
+
+.eliminatoria-table .pontos.zero {
+    color: #888;
+}
+
+/* Cores para acertos */
+.eliminatoria-table tr.excelente {
+    background: rgba(46, 204, 113, 0.15);
+    border-left: 4px solid #2ecc71;
+}
+
+.eliminatoria-table tr.bom {
+    background: rgba(52, 152, 219, 0.15);
+    border-left: 4px solid #3498db;
+}
+
+.eliminatoria-table tr.parcial {
+    background: rgba(241, 196, 15, 0.15);
+    border-left: 4px solid #f1c40f;
+}
+
+.eliminatoria-table tr.errado {
+    border-left: 4px solid #888;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .eliminatoria-table {
+        font-size: 0.85rem;
+    }
+    
+    .eliminatoria-table th,
+    .eliminatoria-table td {
+        padding: 8px;
+    }
+}
+
+/* PALPITES ELIMINATÓRIA */
+.eliminatoria-header {
+    background: linear-gradient(135deg, #1e3c72, #2a5298);
+    padding: 20px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.eliminatoria-header h2 {
+    margin: 0 0 15px 0;
+    font-size: 1.8rem;
+}
+
+.total-eliminatoria {
+    background: rgba(255, 215, 0, 0.2);
+    padding: 10px 20px;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+.total-label {
+    font-size: 1rem;
+    margin-right: 10px;
+}
+
+.total-value {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ffd700;
+}
+
+.eliminatoria-container {
+    overflow-x: auto;
+    background: #122b5c;
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.eliminatoria-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+.eliminatoria-table th,
+.eliminatoria-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.eliminatoria-table th {
+    background: rgba(0, 0, 0, 0.3);
+    color: #ffd700;
+    font-weight: 600;
+    position: sticky;
+    top: 0;
+}
+
+.eliminatoria-table tr:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.eliminatoria-table .data-hora {
+    font-size: 0.85rem;
+    white-space: nowrap;
+    color: #2ecc71;
+}
+
+.eliminatoria-table .jogo {
+    font-weight: 600;
+}
+
+.eliminatoria-table .palpite {
+    font-weight: 700;
+    color: #ffd700;
+}
+
+.eliminatoria-table .real {
+    color: #2ecc71;
+}
+
+.eliminatoria-table .pontos {
+    font-weight: bold;
+    text-align: center;
+}
+
+.eliminatoria-table .pontos.positivo {
+    color: #2ecc71;
+}
+
+.eliminatoria-table .pontos.zero {
+    color: #888;
+}
+
+/* Cores para níveis de acerto */
+.eliminatoria-table tr.excelente {
+    background: rgba(46, 204, 113, 0.15);
+    border-left: 4px solid #2ecc71;
+}
+
+.eliminatoria-table tr.bom {
+    background: rgba(52, 152, 219, 0.15);
+    border-left: 4px solid #3498db;
+}
+
+.eliminatoria-table tr.parcial {
+    background: rgba(241, 196, 15, 0.15);
+    border-left: 4px solid #f1c40f;
+}
+
+.eliminatoria-table tr.errado {
+    border-left: 4px solid #888;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .eliminatoria-table {
+        font-size: 0.85rem;
+    }
+    .eliminatoria-table th,
+    .eliminatoria-table td {
+        padding: 8px;
+    }
+}
+
+.match-round {
+    font-size: 0.8rem;
+    color: #ffd700;
+    font-weight: 600;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+}
+
+.match-time {
+    font-size: 0.9rem;
+    color: #2ecc71;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.match-teams {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    margin: 10px 0;
+}
+
+.team.undefined {
+    color: #888;
+    font-style: italic;
+}
+
+.vs {
+    color: #ffd700;
+    font-size: 1.2rem;
+}
+
+.match-score {
+    text-align: center;
+    margin-top: 10px;
+    padding: 8px;
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 8px;
+}
+
+.match-score.final {
+    background: rgba(46, 204, 113, 0.2);
+    border: 1px solid rgba(46, 204, 113, 0.4);
+}
+
+.score {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #2ecc71;
+}
+
+.awaiting {
+    color: #888;
+    font-size: 0.9rem;
+    font-style: italic;
+}
+/* Container de filtros */
+.filter-container {
+    display: flex;
+    gap: 20px;
+    justify-content: center;
+    align-items: flex-end;
+    margin: 25px 0;
+    padding: 20px;
+    background: linear-gradient(135deg, rgba(26, 107, 60, 0.3), rgba(10, 61, 124, 0.3));
+    border: 2px solid var(--gold-trophy);
+    border-radius: var(--radius);
+    flex-wrap: wrap;
+    backdrop-filter: blur(10px);
+}
+
+.filter-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.filter-group label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--gold-trophy);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.filter-group select {
+    padding: 12px 25px;
+    font-size: 1rem;
+    border-radius: 50px;
+    border: 2px solid var(--gold-trophy);
+    background: rgba(0,0,0,0.5);
+    color: var(--white);
+    cursor: pointer;
+    min-width: 220px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.filter-group select:hover {
+    border-color: var(--white);
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.filter-group select:focus {
+    outline: none;
+    border-color: var(--gold-trophy);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.6);
+}
+
+#content {
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+}
+
+/* ===== PLACAR GERAL ===== */
+#ranking-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 25px;
+}
+
+.card {
+    background: linear-gradient(135deg, rgba(26, 107, 60, 0.4), rgba(10, 61, 124, 0.4));
+    border-radius: var(--radius);
+    padding: 30px;
+    box-shadow: var(--shadow-green);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transition: all 0.3s ease;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255,215,0,0.1) 0%, transparent 70%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.card:hover::before {
+    opacity: 1;
+}
+
+.card:hover {
+    transform: translateY(-8px);
+    box-shadow: var(--shadow-gold);
+    border-color: var(--gold-trophy);
+}
+
+.top1 {
+    background: linear-gradient(135deg, #ffd700 0%, #b8860b 100%);
+    color: #000;
+    border: 3px solid #fff5b8;
+}
+
+.top2 {
+    background: linear-gradient(135deg, #e0e0e0 0%, #a0a0a0 100%);
+    color: #000;
+    border: 3px solid #fff;
+}
+
+.top3 {
+    background: linear-gradient(135deg, #cd7f32 0%, #8b4513 100%);
+    color: #fff;
+    border: 3px solid #daa520;
+}
+
+.position {
+    font-size: 3rem;
+    margin-bottom: 10px;
+    line-height: 1;
+}
+
+.card h2 {
+    font-size: 1.6rem;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.card h3 {
+    font-size: 2.2rem;
+    font-weight: 900;
+    margin-bottom: 20px;
+}
+
+.details {
+    width: 100%;
+    border-top: 2px solid rgba(255,255,255,0.2);
+    padding-top: 15px;
+    margin-top: auto;
+}
+
+.details p {
+    display: flex;
+    justify-content: space-between;
+    margin: 8px 0;
+    font-size: 1rem;
+}
+
+.details span {
+    font-weight: 700;
+}
+
+/* ===== PALPITES - RESUMO ===== */
+.palpite-summary {
+    background: linear-gradient(135deg, rgba(26, 107, 60, 0.5), rgba(10, 61, 124, 0.5));
+    border: 3px solid var(--gold-trophy);
+    border-radius: var(--radius);
+    padding: 30px;
+    margin-bottom: 30px;
+    text-align: center;
+    box-shadow: var(--shadow-gold);
+    position: relative;
+}
+
+.palpite-summary::before {
+    content: '⚽';
+    position: absolute;
+    top: -20px;
+    left: 30px;
+    font-size: 3rem;
+    animation: bounce 1s ease-in-out infinite;
+}
+
+.palpite-summary::after {
+    content: '🏆';
+    position: absolute;
+    top: -20px;
+    right: 30px;
+    font-size: 3rem;
+    animation: bounce 1s ease-in-out infinite 0.5s;
+}
+
+@keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+.palpite-summary h2 {
+    color: var(--gold-trophy);
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+/* Banner de posição no ranking */
+.ranking-position {
+    background: linear-gradient(135deg, var(--gold-trophy), var(--gold-dark));
+    color: #000;
+    padding: 15px 30px;
+    border-radius: 50px;
+    display: inline-block;
+    margin-bottom: 20px;
+    font-weight: 900;
+    font-size: 1.3rem;
+    box-shadow: 0 4px 20px rgba(255, 215, 0, 0.5);
+    animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { box-shadow: 0 4px 20px rgba(255, 215, 0, 0.5); }
+    50% { box-shadow: 0 4px 30px rgba(255, 215, 0, 0.8); }
+}
+
+.summary-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.stat-box {
+    background: rgba(0,0,0,0.4);
+    padding: 20px 15px;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+.stat-box:hover {
+    transform: scale(1.05);
+    border-color: var(--gold-trophy);
+}
+
+.stat-box .stat-value {
+    font-size: 2.5rem;
+    font-weight: 900;
+    color: var(--gold-trophy);
+    display: block;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.stat-box .stat-label {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    opacity: 0.9;
+    margin-top: 5px;
+    display: block;
+}
+
+/* ===== TABELA DE PALPITES ===== */
+.results-container {
+    overflow-x: auto;
+    background: rgba(0,0,0,0.4);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-green);
+    padding: 20px;
+    border: 2px solid rgba(255, 215, 0, 0.2);
+}
+
+.predictions-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 700px;
+}
+
+.predictions-table th,
+.predictions-table td {
+    padding: 15px 12px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 215, 0, 0.1);
+}
+
+.predictions-table th {
+    background: linear-gradient(135deg, var(--green-pitch), var(--green-dark));
+    color: var(--gold-trophy);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+    position: sticky;
+    top: 0;
+    border-bottom: 3px solid var(--gold-trophy);
+}
+
+.predictions-table .col-date {
+    text-align: left;
+    font-size: 0.9rem;
+    color: var(--white);
+    white-space: nowrap;
+}
+
+.predictions-table .col-match {
+    text-align: left;
+    font-weight: 600;
+    color: var(--white);
+}
+
+.predictions-table .vs {
+    color: var(--gold-trophy);
+    margin: 0 8px;
+    font-weight: 900;
+}
+
+.predictions-table .prediction {
+    font-size: 1.2rem;
+    font-weight: 900;
+    padding: 8px 16px;
+    border-radius: 10px;
+    display: inline-block;
+    min-width: 80px;
+}
+
+.predictions-table .prediction.correct {
+    background: linear-gradient(135deg, #4ade80, #22c55e);
+    color: #000;
+    border: 2px solid #4ade80;
+    box-shadow: 0 0 15px rgba(74, 222, 128, 0.5);
+}
+
+.predictions-table .prediction.partial {
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #000;
+    border: 2px solid #fbbf24;
+    box-shadow: 0 0 15px rgba(251, 191, 36, 0.5);
+}
+
+.predictions-table .prediction.wrong {
+    background: linear-gradient(135deg, #f87171, #dc143c);
+    color: #fff;
+    border: 2px solid #f87171;
+    box-shadow: 0 0 15px rgba(248, 113, 113, 0.5);
+}
+
+.predictions-table .points {
+    font-weight: 900;
+    font-size: 1.4rem;
+    color: var(--gold-trophy);
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.predictions-table .points.zero {
+    color: #6b7280;
+    opacity: 0.6;
+}
+
+.predictions-table tr:hover {
+    background: rgba(255, 215, 0, 0.05);
+}
+
+/* ===== SEÇÕES DE GRUPO ===== */
+.group-section {
+    margin-bottom: 40px;
+    background: rgba(0,0,0,0.3);
+    border-radius: var(--radius);
+    padding: 25px;
+    border: 2px solid rgba(255, 215, 0, 0.2);
+}
+
+.group-title {
+    font-size: 2.5rem;
+    color: var(--gold-trophy);
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 3px solid var(--gold-trophy);
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+}
+
+.games-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.games-table th,
+.games-table td {
+    padding: 14px 12px;
+    text-align: left;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.games-table th {
+    background: linear-gradient(135deg, var(--green-pitch), var(--green-dark));
+    color: var(--gold-trophy);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+.games-table .date {
+    font-weight: 600;
+    color: var(--white);
+}
+
+.games-table .teams {
+    font-size: 1.1rem;
+    color: var(--white);
+}
+
+.games-table .result {
+    text-align: center;
+    font-weight: 900;
+    color: var(--gold-trophy);
+    font-size: 1.2rem;
+}
+
+
+/* ===== BOTÃO FLUTUANTE WHATSAPP ===== */
+.whatsapp-float {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 9999;
+    cursor: grab;
+    user-select: none;
+    width: 60px;
+    height: 60px;
+    background: #25D366;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    animation: pulse-whatsapp 2s infinite;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.whatsapp-float:active {
+    cursor: grabbing;
+}
+
+.whatsapp-float.dragging {
+    cursor: grabbing;
+    animation: none;
+    opacity: 0.9;
+    transform: scale(1.1);
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.1);
+    box-shadow: 0 6px 25px rgba(37, 211, 102, 0.6);
+}
+
+.whatsapp-float svg {
+    width: 32px;
+    height: 32px;
+    pointer-events: none;
+}
+
+/* Tooltip */
+.whatsapp-tooltip {
+    position: absolute;
+    right: 70px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: #333;
+    color: white;
+    padding: 8px 15px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+}
+
+.whatsapp-tooltip::after {
+    content: '';
+    position: absolute;
+    right: -8px;
+    top: 50%;
+    transform: translateY(-50%);
+    border: 4px solid transparent;
+    border-left-color: #333;
+}
+
+.whatsapp-float:hover .whatsapp-tooltip {
+    opacity: 1;
+}
+
+@keyframes pulse-whatsapp {
+    0% {
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4),
+                    0 0 0 0 rgba(37, 211, 102, 0.7);
+    }
+    70% {
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4),
+                    0 0 0 15px rgba(37, 211, 102, 0);
+    }
+    100% {
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4),
+                    0 0 0 0 rgba(37, 211, 102, 0);
+    }
+}
+
+/* ===== CORREÇÃO FILTRO MOBILE ===== */
+@media (max-width: 768px) {
+    .whatsapp-float {
+        width: 55px;
+        height: 55px;
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    .whatsapp-float svg {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .whatsapp-tooltip {
+        display: none;
+    }
+    
+    /* ✅ CORREÇÃO DO FILTRO MOBILE */
+    .filter-container {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 12px !important;
+        padding: 15px !important;
+        width: 100% !important;
+        box-sizing: border-box !important;
+    }
+    
+    .filter-group {
+        width: 100% !important;
+    }
+    
+    .filter-group label {
+        font-size: 0.8rem !important;
+        margin-bottom: 5px !important;
+        display: block !important;
+    }
+    
+    .filter-group select {
+        width: 100% !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        padding: 10px 12px !important;
+        font-size: 0.95rem !important;
+        box-sizing: border-box !important;
+        -webkit-appearance: menulist !important;
+        appearance: menulist !important;
+    }
+}
+
+/* Responsivo - celular */
+@media (max-width: 768px) {
+    .whatsapp-float {
+        bottom: 15px;
+        right: 15px;
+    }
+    
+    .whatsapp-link {
+        width: 55px;
+        height: 55px;
+    }
+    
+    .whatsapp-link svg {
+        width: 28px;
+        height: 28px;
+    }
+    
+    .whatsapp-tooltip {
+        display: none;
+    }
+}
+
+/* ===== LOADING E ERROR ===== */
+.loading {
+    text-align: center;
+    padding: 60px 20px;
+    font-size: 1.5rem;
+    color: var(--gold-trophy);
+}
+
+.error {
+    text-align: center;
+    padding: 40px 20px;
+    font-size: 1.2rem;
+    color: #ff6b6b;
+    background: rgba(255, 107, 107, 0.1);
+    border-radius: 12px;
+    border: 2px solid #ff6b6b;
+}
+
+.no-data {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--white);
+    font-size: 1.3rem;
+    opacity: 0.8;
+}
+
+/* ===== RESPONSIVO - CELULAR ===== */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 1.5rem !important;
+        letter-spacing: 1px !important;
+    }
+
+    .toggle-buttons {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+
+    .btn {
+        padding: 10px 14px !important;
+        font-size: 0.85rem !important;
+    }
+
+    .filter-container {
+        padding: 12px !important;
+        gap: 10px !important;
+    }
+
+    .filter-group select {
+        min-width: 150px !important;
+        font-size: 0.9rem !important;
+        padding: 8px 12px !important;
+    }
+
+    .group-title {
+        font-size: 1.5rem !important;
+        letter-spacing: 2px !important;
+    }
+
+    .results-container {
+        padding: 10px !important;
+        overflow-x: auto !important;
+    }
+
+    /* Tabela de jogos - mobile */
+    .games-table {
+        font-size: 0.85rem !important;
+        min-width: 100% !important;
+    }
+
+    .games-table th,
+    .games-table td {
+        padding: 10px 6px !important;
+        font-size: 0.8rem !important;
+    }
+
+    .games-table .date {
+        font-size: 0.75rem !important;
+        white-space: nowrap !important;
+    }
+
+    .games-table .teams {
+        font-size: 0.8rem !important;
+    }
+
+    .games-table .result {
+        font-size: 0.9rem !important;
+    }
+
+    /* Tabela de palpites - mobile */
+    .predictions-table {
+        font-size: 0.75rem !important;
+    }
+
+    .predictions-table th,
+    .predictions-table td {
+        padding: 8px 4px !important;
+        font-size: 0.7rem !important;
+    }
+
+    .predictions-table .col-date {
+        font-size: 0.7rem !important;
+    }
+
+    .predictions-table .col-match {
+        font-size: 0.75rem !important;
+    }
+
+    .predictions-table .prediction {
+        font-size: 0.8rem !important;
+        padding: 4px 8px !important;
+    }
+
+    .predictions-table .points {
+        font-size: 0.9rem !important;
+    }
+
+    /* Cards do ranking - mobile */
+    #ranking-grid {
+        grid-template-columns: 1fr !important;
+        gap: 15px !important;
+    }
+
+    .card {
+        padding: 20px !important;
+    }
+
+    .card h2 {
+        font-size: 1.2rem !important;
+    }
+
+    .card h3 {
+        font-size: 1.8rem !important;
+    }
+
+    .position {
+        font-size: 2rem !important;
+    }
+
+    /* Resumo de palpites - mobile */
+    .palpite-summary {
+        padding: 15px !important;
+    }
+
+    .palpite-summary h2 {
+        font-size: 1.3rem !important;
+    }
+
+    .summary-stats {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 8px !important;
+    }
+
+    .stat-box {
+        padding: 10px 8px !important;
+    }
+
+    .stat-box .stat-value {
+        font-size: 1.5rem !important;
+    }
+
+    .stat-box .stat-label {
+        font-size: 0.65rem !important;
+    }
+
+    .ranking-position {
+        font-size: 1rem !important;
+        padding: 10px 20px !important;
+    }
+}
+
+/* ===== CELULAR MUITO PEQUENO ===== */
+@media (max-width: 400px) {
+    h1 {
+        font-size: 1.2rem !important;
+    }
+
+    .btn {
+        padding: 8px 10px !important;
+        font-size: 0.75rem !important;
+    }
+
+    .games-table th,
+    .games-table td {
+        padding: 8px 4px !important;
+        font-size: 0.7rem !important;
+    }
+
+    .predictions-table th,
+    .predictions-table td {
+        padding: 6px 3px !important;
+        font-size: 0.65rem !important;
+    }
+
+    .summary-stats {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}
